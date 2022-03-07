@@ -165,7 +165,8 @@
     "disablePlugins": [],
     "enablePlugins": [
       "Spammer",
-      "Autopeering"
+      "Autopeering",
+      "Prometheus"
     ]
   },
   "p2p": {

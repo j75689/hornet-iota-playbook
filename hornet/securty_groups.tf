@@ -18,6 +18,14 @@ resource "aws_security_group" "hornet" {
     cidr_blocks = "${var.cluster_network_cidr}"
   }
 
+  // node exporter
+  ingress {
+    from_port   = 9100
+    to_port     = 9100
+    protocol    = "tcp"
+    cidr_blocks = "${var.cluster_network_cidr}"
+  }
+
   // profiling
   ingress {
     from_port   = 6060
