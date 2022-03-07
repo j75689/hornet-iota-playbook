@@ -80,3 +80,9 @@ services:
       - "traefik.http.routers.hornet-https.entrypoints=websecure"
       - "traefik.http.routers.hornet-https.tls.certresolver=myresolver"
       - "traefik.http.services.hornet.loadbalancer.server.port=14265"
+    logging:
+      driver: awslogs
+      options:
+        awslogs-region: "${awslogs_region}"
+        awslogs-group: "${awslogs_group}"
+        awslogs-create-group: "${awslogs_create_group}"

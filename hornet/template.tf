@@ -12,6 +12,9 @@ data "template_file" "docker-compose" {
     traefik_image="${var.traefik_image}"
     acme_email="${var.letsencrypt_acme_email}"
     domain="${var.letsencrypt_domain}"
+    awslogs_region="${var.awslogs_region}"
+    awslogs_group="${var.awslogs_group}"
+    awslogs_create_group="${var.awslogs_create_group}"
   }
 }
 
