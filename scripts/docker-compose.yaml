@@ -1,0 +1,67 @@
+version: '3'
+services:
+  traefik:
+    image: ${traefik_image}
+    container_name: traefik
+    user: root
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+    command:
+      # - "--log.level=DEBUG"
+      - "--api.insecure=true"
+      - "--accesslog=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.myresolver.acme.httpchallenge=true"
+      - "--certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web"
+      - "--certificatesresolvers.myresolver.acme.email=${acme_email}"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+    volumes:
+      - /server/letsencrypt:/letsencrypt
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+  hornet:
+    container_name: hornet
+    image: ${hornet_image}
+    network_mode: host
+    restart: always
+    user: root
+    ulimits:
+      nofile:
+        soft: 8192
+        hard: 8192
+    ports:
+      - 14265:14265
+      - 14266:14266
+      - 8081:8081
+      - 15600:15600
+      - 14626:14626
+      - 8091:8091
+      - 1883:1883
+      - 6060:6060
+      - 9311:9311
+    stop_grace_period: 5m
+    cap_drop:
+      - ALL
+    volumes:
+      - /server/hornet/config.json:/app/config.json:ro
+      - /server/hornet/peering.json:/app/peering.json
+      - /server/hornet/profiles.json:/app/profiles.json:ro
+      - /server/hornet/mainnetdb:/app/mainnetdb
+      - /server/hornet/p2pstore:/app/p2pstore
+      - /server/hornet/snapshots/mainnet:/app/snapshots/mainnet
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=default"
+      - "traefik.http.middlewares.redirectscheme.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.redirectscheme.redirectscheme.permanent=true"
+      - "traefik.http.routers.hornet.middlewares=redirectscheme"
+      - "traefik.http.routers.hornet.rule=Host(`${domain}`)"
+      - "traefik.http.routers.hornet.entrypoints=web"
+      - "traefik.http.routers.hornet-https.rule=Host(`${domain}`)"
+      - "traefik.http.routers.hornet-https.entrypoints=websecure"
+      - "traefik.http.routers.hornet-https.tls.certresolver=myresolver"
+      - "traefik.http.services.hornet.loadbalancer.server.port=14265"

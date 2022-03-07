@@ -32,13 +32,13 @@
     }
   },
   "dashboard": {
-    "bindAddress": "localhost:8081",
+    "bindAddress": "0.0.0.0:8081",
     "dev": false,
     "auth": {
       "sessionTimeout": "72h",
-      "username": "admin",
-      "passwordHash": "0000000000000000000000000000000000000000000000000000000000000000",
-      "passwordSalt": "0000000000000000000000000000000000000000000000000000000000000000"
+      "username": "${dashboard_username}",
+      "passwordHash": "${dashboard_password_hash}",
+      "passwordSalt": "${dashboard_password_salt}"
     }
   },
   "db": {
@@ -130,7 +130,7 @@
       "validate": false,
       "ignoreSoftErrors": false,
       "api": {
-        "address": "http://localhost:14266",
+        "address": "http://0.0.0.0:14266",
         "timeout": "5s"
       },
       "coordinator": {
@@ -164,7 +164,8 @@
     "profile": "auto",
     "disablePlugins": [],
     "enablePlugins": [
-      "Spammer"
+      "Spammer",
+      "Autopeering"
     ]
   },
   "p2p": {
@@ -201,7 +202,7 @@
   "logger": {
     "level": "info",
     "disableCaller": true,
-    "encoding": "console",
+    "encoding": "json",
     "outputPaths": [
       "stdout"
     ]
@@ -227,24 +228,24 @@
     "batchTimeout": "2s",
     "powWorkerCount": 0,
     "website": {
-      "bindAddress": "localhost:8091",
+      "bindAddress": "0.0.0.0:8091",
       "enabled": true
     }
   },
   "mqtt": {
-    "bindAddress": "localhost:1883",
+    "bindAddress": "0.0.0.0:1883",
     "wsPort": 1888,
     "workerCount": 100
   },
   "profiling": {
-    "bindAddress": "localhost:6060"
+    "bindAddress": "0.0.0.0:6060"
   },
   "prometheus": {
-    "bindAddress": "localhost:9311",
+    "bindAddress": "0.0.0.0:9311",
     "fileServiceDiscovery": {
       "enabled": false,
       "path": "target.json",
-      "target": "localhost:9311"
+      "target": "0.0.0.0:9311"
     },
     "databaseMetrics": true,
     "nodeMetrics": true,

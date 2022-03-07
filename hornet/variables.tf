@@ -1,5 +1,7 @@
+### Infrastructure ###
+
 variable "ssh_key_name" {
-  default = "iota"
+  default = null
 }
 
 variable "ssh_username" {
@@ -7,7 +9,7 @@ variable "ssh_username" {
 }
 
 variable "ssh_key_file" {
-  default = "../iota.pem"
+  default = null
 }
 
 variable "project" {
@@ -16,11 +18,6 @@ variable "project" {
 
 variable "region" {
   default = "ap-northeast-1"
-}
-
-variable "iota_hornet_version" {
-  description = "The IOTA hornet version"
-  default     = "https://github.com/gohornet/hornet/releases/download/v1.1.3/HORNET-1.1.3_Linux_x86_64.tar.gz"
 }
 
 variable "instance_type" {
@@ -41,11 +38,11 @@ variable "ebs_mount_point" {
 }
 
 variable "subnet_id" {
-  default = ""
+  default = null
 }
 
 variable "vpc_id" {
-  default = ""
+  default = null
 }
 
 variable "ssh_inbound_block" {
@@ -56,4 +53,36 @@ variable "ssh_inbound_block" {
 variable "cluster_network_cidr" {
   type    = list(string)
   default = ["172.31.0.0/16"]
+}
+
+### Application ###
+
+variable "iota_hornet_image" {
+  default     = "gohornet/hornet:latest"
+}
+
+variable "dashboard_username" {
+  default     = "admin"
+}
+
+variable "dashboard_password_hash" {
+  default     = "0000000000000000000000000000000000000000000000000000000000000000"
+}
+
+variable "dashboard_password_salt" {
+  default     = "0000000000000000000000000000000000000000000000000000000000000000"
+}
+
+### Proxy ###
+
+variable "traefik_image" {
+  default     = "traefik:latest"
+}
+
+variable "letsencrypt_acme_email" {
+  default     = ""
+}
+
+variable "letsencrypt_domain" {
+  default     = ""
 }
