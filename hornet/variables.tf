@@ -7,7 +7,7 @@ variable "ssh_username" {
 }
 
 variable "ssh_key_file" {
-  default = "./iota.pem"
+  default = "../iota.pem"
 }
 
 variable "project" {
@@ -15,16 +15,7 @@ variable "project" {
 }
 
 variable "region" {
-  default = "ap-southeast-1"
-}
-
-variable "amis" {
-  type = map(string)
-
-  default = {
-    ap-southeast-1 = "ami-07b4f72c4c356c19d"
-    us-west-2 = "ami-07b4f72c4c356c19d"
-  }
+  default = "ap-northeast-1"
 }
 
 variable "iota_hornet_version" {

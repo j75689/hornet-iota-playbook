@@ -16,9 +16,9 @@ resource "null_resource" "nodes" {
   provisioner "remote-exec" {
     inline = [
         // mount ebs
-        "sudo mkfs -t xfs /dev/xvdf",
+        "sudo mkfs -t xfs ${var.ebs_mount_point}",
         "sudo mkdir -p /server",
-        "sudo mount /dev/xvdf /server",
+        "sudo mount ${var.ebs_mount_point} /server",
         // install docker, docker-compose
         "chmod +x /tmp/setup-docker.sh",
         "sudo /tmp/setup-docker.sh"

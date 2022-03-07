@@ -63,6 +63,7 @@ resource "aws_security_group" "hornet" {
     to_port         = 0
     protocol        = "-1"
     cidr_blocks     = ["0.0.0.0/0"]
+    description = "Allow all outbound traffic"
   }
 
   tags = {
