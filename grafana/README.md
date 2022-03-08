@@ -15,3 +15,14 @@ Hornet node has embedded a Prometheus exporter in the servers layer, if you enab
 
 ![hornet-exporter](../assert/hornet-exporter.png)
 
+
+## Alerting
+
+Grafana supports a configurable alert module, which can quickly configure alarm conditions through the Grafana background management page.
+
+Check the detail by [Grafana Alerts](https://grafana.com/docs/grafana/latest/alerting/unified-alerting/)
+
+Hornet metrics:
+ - iota_node_health: That can determine whether the Hornet node is synchronizing
+ - iota_node_messages_per_second: The amount of messages issued to the network every second.
+ - ...
