@@ -11,7 +11,7 @@ resource "null_resource" "nodes" {
   }
 
   provisioner "file" {
-    content = "${data.template_file.docker-compose.rendered}"
+    content = "${data.template_file.docker-compose[count.index].rendered}"
     destination = "/tmp/docker-compose.yaml"
   }
 

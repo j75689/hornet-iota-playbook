@@ -105,5 +105,7 @@ variable "letsencrypt_acme_email" {
 }
 
 variable "letsencrypt_domain" {
-  default     = ""
+  description = "Domain for each hornet node"
+  type    = list(string)
+  default = []
 }

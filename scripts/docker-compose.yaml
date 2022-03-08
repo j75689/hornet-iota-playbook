@@ -43,7 +43,6 @@ services:
   hornet:
     container_name: hornet
     image: ${hornet_image}
-    network_mode: host
     restart: always
     user: root
     ulimits:
