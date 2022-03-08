@@ -9,9 +9,11 @@ data "template_file" "docker-compose" {
   template = "${file("${path.module}/../scripts/docker-compose.yaml")}"
   vars = {
     hornet_image="${var.iota_hornet_image}"
+    enable_proxy="${var.enable_proxy}"
     traefik_image="${var.traefik_image}"
     acme_email="${var.letsencrypt_acme_email}"
     domain="${var.letsencrypt_domain}"
+    enable_logging="${var.enable_logging}"
     awslogs_region="${var.awslogs_region}"
     awslogs_group="${var.awslogs_group}"
     awslogs_create_group="${var.awslogs_create_group}"

@@ -73,6 +73,12 @@ variable "dashboard_password_salt" {
   default     = "0000000000000000000000000000000000000000000000000000000000000000"
 }
 
+
+### Logging ###
+variable "enable_logging" {
+  default     = false
+}
+
 variable "awslogs_region" {
   default     = "ap-northeast-1"
 }
@@ -86,6 +92,9 @@ variable "awslogs_create_group" {
 }
 
 ### Proxy ###
+variable "enable_proxy" {
+  default     = false
+}
 
 variable "traefik_image" {
   default     = "traefik:latest"

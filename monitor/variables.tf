@@ -70,3 +70,20 @@ variable "node_exporter" {
   type    = list(string)
   default     = []
 }
+
+### Proxy ###
+variable "enable_proxy" {
+  default     = false
+}
+
+variable "traefik_image" {
+  default     = "traefik:latest"
+}
+
+variable "letsencrypt_acme_email" {
+  default     = ""
+}
+
+variable "letsencrypt_domain" {
+  default     = ""
+}

@@ -7,6 +7,12 @@ data "template_file" "setup-docker" {
 
 data "template_file" "monitor" {
   template = "${file("${path.module}/../scripts/monitor.yaml")}"
+  vars = {
+    enable_proxy="${var.enable_proxy}"
+    traefik_image="${var.traefik_image}"
+    acme_email="${var.letsencrypt_acme_email}"
+    domain="${var.letsencrypt_domain}"
+  }
 }
 
 data "template_file" "prometheus" {

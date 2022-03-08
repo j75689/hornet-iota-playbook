@@ -15,6 +15,7 @@ services:
       - '--path.rootfs=/rootfs'
       - '--path.sysfs=/host/sys'
       - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+  %{ if enable_proxy }
   traefik:
     image: ${traefik_image}
     container_name: traefik
@@ -38,6 +39,7 @@ services:
     volumes:
       - /server/letsencrypt:/letsencrypt
       - /var/run/docker.sock:/var/run/docker.sock:ro
+  %{ endif }
   hornet:
     container_name: hornet
     image: ${hornet_image}
@@ -68,6 +70,7 @@ services:
       - /server/hornet/mainnetdb:/app/mainnetdb
       - /server/hornet/p2pstore:/app/p2pstore
       - /server/hornet/snapshots/mainnet:/app/snapshots/mainnet
+    %{ if enable_proxy }
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=default"
@@ -80,9 +83,12 @@ services:
       - "traefik.http.routers.hornet-https.entrypoints=websecure"
       - "traefik.http.routers.hornet-https.tls.certresolver=myresolver"
       - "traefik.http.services.hornet.loadbalancer.server.port=14265"
+    %{ endif }
+    %{ if enable_logging }
     logging:
       driver: awslogs
       options:
         awslogs-region: "${awslogs_region}"
         awslogs-group: "${awslogs_group}"
         awslogs-create-group: "${awslogs_create_group}"
+    %{ endif }

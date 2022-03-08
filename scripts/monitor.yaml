@@ -1,9 +1,5 @@
 version: '3'
 
-networks:
-  monitoring:
-    driver: bridge
-
 services:
   node-exporter:
     image: prom/node-exporter:latest
@@ -21,8 +17,32 @@ services:
       - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
     ports:
       - 9100:9100
-    networks:
-      - monitoring
+  
+  %{ if enable_proxy }
+  traefik:
+    image: ${traefik_image}
+    container_name: traefik
+    user: root
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+    command:
+      # - "--log.level=DEBUG"
+      - "--api.insecure=true"
+      - "--accesslog=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.myresolver.acme.httpchallenge=true"
+      - "--certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web"
+      - "--certificatesresolvers.myresolver.acme.email=${acme_email}"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+    volumes:
+      - /server/letsencrypt:/letsencrypt
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+  %{ endif }
 
   prometheus:
     image: prom/prometheus:latest
@@ -40,8 +60,6 @@ services:
       - '--web.enable-lifecycle'
     ports:
       - 9090:9090
-    networks:
-      - monitoring
   
   grafana:
     image: grafana/grafana-enterprise:latest
@@ -51,5 +69,16 @@ services:
       - 3000:3000
     volumes:
       - /server/grafana/data:/var/lib/grafana
-    networks:
-      - monitoring
+    %{ if enable_proxy }
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=default"
+      - "traefik.http.middlewares.redirectscheme.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.redirectscheme.redirectscheme.permanent=true"
+      - "traefik.http.routers.grafana.middlewares=redirectscheme"
+      - "traefik.http.routers.grafana.rule=Host(`${domain}`)"
+      - "traefik.http.routers.grafana.entrypoints=web"
+      - "traefik.http.routers.grafana-https.rule=Host(`${domain}`)"
+      - "traefik.http.routers.grafana-https.entrypoints=websecure"
+      - "traefik.http.routers.grafana-https.tls.certresolver=myresolver"
+    %{ endif }
